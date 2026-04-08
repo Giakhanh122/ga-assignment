@@ -1,6 +1,6 @@
 import random
 from functools import reduce
-
+import time
 # n = 100 items
 
 
@@ -34,19 +34,29 @@ def next_generation(population, mutation_prob, weights, values, capacity):
         for child in crossover(selection(population, weights, values, capacity), selection(population, weights, values, capacity))
     ]
     #debug
-    print(fitness(max(children, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity))
+    print(f"Fitness : {fitness(max(children, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)}")
     return [mutate(c, mutation_prob) for c in children[:n]]
 
 def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 500):
+    start = time.time()
 
     population = [create_chromosome(length) for _ in range(population_size)]
-    
     weights = [random.randint(1,50) for _ in range(length)]
     values  = [random.randint(1,20) for _ in range(length)]
-
     capacity = (int)(0.4 * sum(weights))
-
+        
+    def step(state, _):
+        pop, history = state
+        new_pop = next_generation(pop, mutation_prob, weights, values, capacity)
+        current_fitness = fitness(max(new_pop, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)
+        return (pop, history + [current_fitness])
     
-    final_gen = reduce(lambda x, _ : next_generation(x, mutation_prob, weights, values, capacity), range(generations), population)
-    result = max(final_gen, key=lambda x : fitness(x, weights, values, capacity))
-    return result
+    
+    final_gen, history = reduce(step, range(generations), (population, []))
+    
+    end = time.time()
+    runtime = end - start
+    
+    best = max(final_gen, key=lambda x : fitness(x, weights, values, capacity))
+    best_fitness = fitness(best, weights, values, capacity)
+    return best, best_fitness, history, runtime

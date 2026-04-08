@@ -1,6 +1,8 @@
 import random
 from functools import reduce
 
+import time
+
 def create_chromosome(length : int):
     return [random.randint(0,1) for _ in range(length)]
 
@@ -34,7 +36,27 @@ def next_generation(population, mutation_prob):
     return [mutate(c, mutation_prob) for c in children[:n]]
 
 def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 120):
-    population = [create_chromosome
-(length) for _ in range(population_size)]
-    final_gen = reduce(lambda x, _ : next_generation(x, mutation_prob), range(generations), population)
-    return max(final_gen, key=fitness)
+    
+    start = time.time()
+    
+    population = [create_chromosome(length) for _ in range(population_size)]
+    
+    def step(state, _):
+        pop, history = state
+        newPop = next_generation(pop, mutation_prob)
+        current_fitness = fitness(max(newPop, key=fitness))
+        return newPop, history + [current_fitness]
+        
+    
+    
+    
+    final_gen, history = reduce(step, range(generations), (population, []))
+    end = time.time()
+    runtime = end - start
+    
+    best = max(final_gen, key=fitness)
+    best_fitness = fitness(best)
+    
+    return best, best_fitness, history, runtime
+
+
