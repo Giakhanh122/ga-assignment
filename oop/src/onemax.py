@@ -15,7 +15,7 @@ class Chromosome:
     def __str__(self): 
         return str(self.individual)
 
-class TournamentSelection(SelectionStrategy):
+class OneMaxSelection(SelectionStrategy):
     def __init__(self, k=3):
         self.k = k
 

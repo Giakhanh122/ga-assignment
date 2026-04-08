@@ -1,3 +1,7 @@
-from src.onemax import ga
+import src.onemax as onemax
+import src.knapsack as knapsack
 
-print(ga())
+# One Max
+# print(onemax.ga())
+# Knapsack
+print(knapsack.ga())

@@ -1,9 +1,7 @@
 import random
 from functools import reduce
 
-
-
-def create_individual(length : int):
+def create_chromosome(length : int):
     return [random.randint(0,1) for _ in range(length)]
 
 def fitness(bits : list):
@@ -30,9 +28,13 @@ def next_generation(population, mutation_prob):
         for _ in range((n + 1) // 2)
         for child in crossover(selection(population), selection(population))
     ]
+    #debug
+    best = fitness(max(children, key=fitness))
+    print(f"Fitness : {best}")
     return [mutate(c, mutation_prob) for c in children[:n]]
 
-def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 80):
-    population = [create_individual(length) for _ in range(population_size)]
-    final_gen = reduce(lambda x, _ : next_generation(x, mutation_prob), range(population_size), population)
+def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 120):
+    population = [create_chromosome
+(length) for _ in range(population_size)]
+    final_gen = reduce(lambda x, _ : next_generation(x, mutation_prob), range(generations), population)
     return max(final_gen, key=fitness)

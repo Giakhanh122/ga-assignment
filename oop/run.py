@@ -14,3 +14,4 @@ best = ga.run()
 
 print("Best:", best)
 print("Fitness:", best.fitness())
+
