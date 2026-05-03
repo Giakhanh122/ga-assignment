@@ -49,13 +49,16 @@ def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATI
     return best, best_fitness, history, runtime
 
 
-def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED):
+def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, weights=None, values=None, capacity=None):
     random.seed(seed)
     best, best_fitness, history, runtime = knapsack.ga(
         length=length,
         population_size=population_size,
         mutation_prob=mutation_prob,
         generations=generations,
+        weights=weights,
+        values=values,
+        capacity=capacity,
     )
     print(best)
     print("Best fitness : ",best_fitness)

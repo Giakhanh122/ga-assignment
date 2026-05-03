@@ -60,10 +60,10 @@ def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generatio
     return best, best_fitness, history, runtime
 
 
-def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB):
+def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB, weights=None, values=None):
     random.seed(seed)
     population = Population(size=population_size, length=length)
-    items = Items(numberOfItems=length)
+    items = Items(numberOfItems=length, weights=weights, values=values)
     ga = KnapSack_GeneticAlgorithm(
         population=population,
         selection=KnapSackSelection(),

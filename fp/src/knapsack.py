@@ -37,13 +37,16 @@ def next_generation(population, mutation_prob, weights, values, capacity):
     print(f"Fitness : {fitness(max(children, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)}")
     return [mutate(c, mutation_prob) for c in children[:n]]
 
-def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 500):
+def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 500, weights=None, values=None, capacity=None):
     start = time.time()
 
     population = [create_chromosome(length) for _ in range(population_size)]
-    weights = [random.randint(1,50) for _ in range(length)]
-    values  = [random.randint(1,20) for _ in range(length)]
-    capacity = (int)(0.4 * sum(weights))
+    if weights is None:
+        weights = [random.randint(1,50) for _ in range(length)]
+    if values is None:
+        values = [random.randint(1,20) for _ in range(length)]
+    if capacity is None:
+        capacity = int(0.4 * sum(weights))
         
     def step(state, _):
         pop, history = state
