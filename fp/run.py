@@ -2,34 +2,71 @@ import src.onemax as onemax
 import src.knapsack as knapsack
 
 import json
-import matplotlib.pylab as plt
+import random
 
-def plot_result(generations, history):
-    plt.plot(range(generations), history)
+SEED = 42
+POP_SIZE = 100
+LENGTH = 100
+GENERATIONS = 300
+MUTATION_PROB = 1 / LENGTH
+
+
+def plot_result(history):
+    import matplotlib.pyplot as plt
+    plt.plot(range(len(history)), history)
     plt.xlabel("generations")
     plt.ylabel("fitness")
     plt.grid()
     plt.show()
 
-def get_json(problem_name ,best, best_fitness, runtime):
+
+def get_json(problem_name, best, best_fitness, runtime):
     result = {
-        "Problem" : problem_name,
-        "Result"  : best,
-        "Fitness" : best_fitness,
-        "Runtime" : runtime
+        "Problem": problem_name,
+        "Result": best,
+        "Fitness": best_fitness,
+        "Runtime": runtime,
     }
     with open("result.json", "w") as f:
-        json.dump(result, f, indent = 4)
+        json.dump(result, f, indent=4)
 
-# One Max
-generations = 100
-best, best_fitness, history, runtime = onemax.ga(generations=generations)
 
-# print(history)
+def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED):
+    random.seed(seed)
+    best, best_fitness, history, runtime = onemax.ga(
+        length=length,
+        population_size=population_size,
+        mutation_prob=mutation_prob,
+        generations=generations,
+    )
+    print(best)
+    print("Best fitness : ",best_fitness)
+    # print(history)
+    print("Runtime : ",runtime)
 
-    
-plot_result(generations, history)
-get_json("One Max", best, best_fitness, runtime)
-# Knapsack
-# print(knapsack.ga())
+    plot_result(history)
+    get_json("One Max", best, best_fitness, runtime)
+    return best, best_fitness, history, runtime
+
+
+def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED):
+    random.seed(seed)
+    best, best_fitness, history, runtime = knapsack.ga(
+        length=length,
+        population_size=population_size,
+        mutation_prob=mutation_prob,
+        generations=generations,
+    )
+    print(best)
+    print("Best fitness : ",best_fitness)
+    # print(history)
+    print("Runtime : ",runtime)
+    plot_result(history)
+    get_json("Knapsack", best, best_fitness, runtime)
+    return best, best_fitness, history, runtime
+
+
+if __name__ == "__main__":
+    run_one_max()
+
 

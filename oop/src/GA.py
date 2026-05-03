@@ -89,6 +89,6 @@ class KnapSack_GeneticAlgorithm:
         runtime = end - start
         
         best = self.population.get_best_knapSack(self.items)
-        best_fitness = best.knapsack_fitness()
+        best_fitness = best.knapsack_fitness(self.items)
         
         return best.data(), best_fitness, self.history, runtime

@@ -1,61 +1,118 @@
-from src.GA import *
+from src.GA import OneMax_GeneticAlgorithm, KnapSack_GeneticAlgorithm
+from src.selection import OneMaxSelection, KnapSackSelection
+from src.crossover import OnePointCrossover
+from src.mutation import BitFlipMutation
+from src.population import Population
+from src.items import Items
 
 import json
-import matplotlib.pyplot as plt
+import random
+
+SEED = 42
+POP_SIZE = 100
+LENGTH = 100
+GENERATIONS = 300
+MUTATION_PROB = 1 / LENGTH
 
 
-def plot_result(generations, history):
-    plt.plot(range(generations), history)
+
+
+
+
+def plot_result(history):
+    import matplotlib.pyplot as plt
+    plt.plot(range(len(history)), history)
     plt.xlabel("generations")
     plt.ylabel("fitness")
     plt.grid()
     plt.show()
-    
-import json
+
 
 def get_json(problem, best, best_fitness, runtime):
     data = {
         "Problem": problem,
         "Best Solution": best,
         "Best Fitness": best_fitness,
-        "Runtime": runtime
+        "Runtime": runtime,
     }
-
     with open("result.json", "w") as f:
         json.dump(data, f, indent=4)
 
 
+def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB):
+    random.seed(seed)
+    population = Population(size=population_size, length=length)
+    ga = OneMax_GeneticAlgorithm(
+        population=population,
+        selection=OneMaxSelection(),
+        crossover=OnePointCrossover(length=length),
+        mutation=BitFlipMutation(prob=mutation_prob),
+        generations=generations,
+    )
+    best, best_fitness, history, runtime = ga.run()
+    print(best)
+    print("Best fitness : ",best_fitness)
+    # print(history)
+    print("Runtime : ",runtime)
 
-onemax_pop = Population(size=50, length=100)
-generations = 100
-ga_onemax = OneMax_GeneticAlgorithm(
-    population=onemax_pop,
-    selection=OneMaxSelection(),
-    crossover=OnePointCrossover(length=100),
-    mutation=BitFlipMutation(prob=0.01),
-    generations=generations
-)
-
-knapsack_pop = Population(size=50, length=100)
-items = Items(numberOfItems=100)
-ga_knapsack = KnapSack_GeneticAlgorithm(
-    population=knapsack_pop,
-    selection=KnapSackSelection(),
-    crossover=OnePointCrossover(length=100),
-    mutation=BitFlipMutation(prob=0.01),
-    generations=generations,
-    items=items
-)
+    plot_result(history)
+    get_json("One Max", best, best_fitness, runtime)
+    return best, best_fitness, history, runtime
 
 
-best, best_fitness, onemax_fitness_history, runtime = ga_onemax.run()
-print(best)
-print(best_fitness)
-print(onemax_fitness_history)
-print(runtime)
+def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB):
+    random.seed(seed)
+    population = Population(size=population_size, length=length)
+    items = Items(numberOfItems=length)
+    ga = KnapSack_GeneticAlgorithm(
+        population=population,
+        selection=KnapSackSelection(),
+        crossover=OnePointCrossover(length=length),
+        mutation=BitFlipMutation(prob=mutation_prob),
+        generations=generations,
+        items=items,
+    )
+    best, best_fitness, history, runtime = ga.run()
+    print(best)
+    print("Best fitness : ",best_fitness)
+    # print(history)
+    print("Runtime : ",runtime)
+    plot_result(history)
+    get_json("Knapsack", best, best_fitness, runtime)
+    return best, best_fitness, history, runtime
 
-plot_result(generations, onemax_fitness_history)
-get_json("One Max", best, best_fitness, runtime)
+
+
+# onemax_pop = Population(size=50, length=100)
+# generations = 100
+# ga_onemax = OneMax_GeneticAlgorithm(
+#     population=onemax_pop,
+#     selection=OneMaxSelection(),
+#     crossover=OnePointCrossover(length=100),
+#     mutation=BitFlipMutation(prob=0.01),
+#     generations=generations
+# )
+
+# knapsack_pop = Population(size=50, length=100)
+# items = Items(numberOfItems=100)
+# ga_knapsack = KnapSack_GeneticAlgorithm(
+#     population=knapsack_pop,
+#     selection=KnapSackSelection(),
+#     crossover=OnePointCrossover(length=100),
+#     mutation=BitFlipMutation(prob=0.01),
+#     generations=generations,
+#     items=items
+# )
+
+
+# best, best_fitness, onemax_fitness_history, runtime = ga_onemax.run()
+# print(best)
+# print(best_fitness)
+# print(onemax_fitness_history)
+# print(runtime)
+
+# plot_result(generations, onemax_fitness_history)
+# get_json("One Max", best, best_fitness, runtime)
 
 
 
@@ -64,3 +121,6 @@ get_json("One Max", best, best_fitness, runtime)
 # print("Best:", best)
 # print("Fitness:", best.knapsack_fitness(items))
 # print(knapsack_fitness_history)
+
+if __name__ == "__main__":
+    run_one_max()

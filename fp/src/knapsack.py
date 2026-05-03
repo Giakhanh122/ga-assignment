@@ -49,7 +49,7 @@ def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 
         pop, history = state
         new_pop = next_generation(pop, mutation_prob, weights, values, capacity)
         current_fitness = fitness(max(new_pop, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)
-        return (pop, history + [current_fitness])
+        return (new_pop, history + [current_fitness])
     
     
     final_gen, history = reduce(step, range(generations), (population, []))
