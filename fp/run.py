@@ -70,6 +70,9 @@ def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTA
 
 
 if __name__ == "__main__":
+    print("__ ONE MAX ___")
     run_one_max()
+    print("__ KNAPSACK ___")
+    run_knap_sack()
 
 

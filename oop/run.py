@@ -123,4 +123,7 @@ def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generation
 # print(knapsack_fitness_history)
 
 if __name__ == "__main__":
+    print("__ ONE MAX ___")
     run_one_max()
+    print("__ KNAPSACK ___")
+    run_knap_sack()
