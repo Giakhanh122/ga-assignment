@@ -20,9 +20,9 @@ SELECTED_LEVELS = ["small", "medium", "large"]
 # SELECTED_LEVELS = ["large"]
 
 CASE_CONFIGS = {
-    "small": {"length": 10, "seed": 42},
-    "medium": {"length": 20, "seed": 84},
-    "large": {"length": 50, "seed": 126},
+    "small": {"length": 30, "seed": 42, "title" : "Knap sack small test : number of items: 30"},
+    "medium": {"length": 50, "seed": 84, "title" : "Knap sack medium test : number of items: 50"},
+    "large": {"length": 100, "seed": 126, "title" : "Knap sack large test : number of items: 100"},
 }
 
 
@@ -52,7 +52,7 @@ def run_knapsack_case(name, config):
     length = config["length"]
     seed = config["seed"]
     weights, values, capacity = generate_case_data(length, seed)
-
+    tit = config["title"]
     print("\n" + "=" * 80)
     print(f"Knapsack test: {name}")
     print("=" * 80)
@@ -75,6 +75,7 @@ def run_knapsack_case(name, config):
         weights=weights,
         values=values,
         capacity=capacity,
+        title_=tit
     )
 
     selected_indices = [index for index, bit in enumerate(best) if bit]

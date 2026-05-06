@@ -18,9 +18,9 @@ SELECTED_LEVELS = ["small", "medium", "large"]
 # SELECTED_LEVELS = ["large"]
 
 CASE_CONFIGS = {
-    "small": {"length": 10},
-    "medium": {"length": 50},
-    "large": {"length": 100},
+    "small": {"length": 75, "title" : "One max small test : bit length 75"},
+    "medium": {"length": 150, "title" : "One max small test : bit length 150"},
+    "large": {"length": 230, "title" : "One max small test : bit length 230"},
 }
 
 
@@ -40,6 +40,7 @@ def ensure_plot():
 
 def run_onemax_case(name, config):
     length = config["length"]
+    tit = config["title"]
     print("\n" + "=" * 80)
     print(f"OneMax test: {name}")
     print("=" * 80)
@@ -52,7 +53,7 @@ def run_onemax_case(name, config):
     print("-" * 80)
 
     ensure_plot()
-    best, best_fitness, history, runtime = fp_run.run_one_max(length=length)
+    best, best_fitness, history, runtime = fp_run.run_one_max(length=length, title_=tit)
 
     print("-" * 80)
     print("Result:")

@@ -32,7 +32,7 @@ def get_json(problem_name, best, best_fitness, runtime):
         json.dump(result, f, indent=4)
 
 
-def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED):
+def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, title_ = "One max problem"):
     random.seed(seed)
     best, best_fitness, history, runtime = onemax.ga(
         length=length,
@@ -45,12 +45,12 @@ def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATI
     # print(history)
     print("Runtime : ",runtime)
 
-    plot_result(history, "One max problem")
+    plot_result(history, title_)
     get_json("One Max", best, best_fitness, runtime)
     return best, best_fitness, history, runtime
 
 
-def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, weights=None, values=None, capacity=None):
+def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, weights=None, values=None, capacity=None, title_ = "Knap sack problem"):
     random.seed(seed)
     best, best_fitness, history, runtime = knapsack.ga(
         length=length,
@@ -65,7 +65,7 @@ def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTA
     print("Best fitness : ",best_fitness)
     # print(history)
     print("Runtime : ",runtime)
-    plot_result(history, "Knap sack problem")
+    plot_result(history, title_)
     get_json("Knapsack", best, best_fitness, runtime)
     return best, best_fitness, history, runtime
 
