@@ -28,14 +28,18 @@ def mutate(individual, prob=0.02):
 
 def next_generation(population, mutation_prob, weights, values, capacity):
     n = len(population)
-    children = [
-        child
-        for _ in range((n + 1) // 2)
-        for child in crossover(selection(population, weights, values, capacity), selection(population, weights, values, capacity))
-    ]
-    #debug
-    print(f"Fitness : {fitness(max(children, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)}")
-    return [mutate(c, mutation_prob) for c in children[:n]]
+    best = max(population, key=lambda x: fitness(x, weights, values, capacity))
+    children = [best]
+
+    while len(children) < n:
+        p1 = selection(population, weights, values, capacity)
+        p2 = selection(population, weights, values, capacity)
+        c1, c2 = crossover(p1, p2)
+        children.append(mutate(c1, mutation_prob))
+        if len(children) < n:
+            children.append(mutate(c2, mutation_prob))
+
+    return children
 
 def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 500, weights=None, values=None, capacity=None):
     start = time.time()
@@ -48,18 +52,18 @@ def ga(length = 100, population_size = 50,mutation_prob =  0.01 , generations = 
     if capacity is None:
         capacity = int(0.4 * sum(weights))
         
-    def step(state, _):
-        pop, history = state
-        new_pop = next_generation(pop, mutation_prob, weights, values, capacity)
-        current_fitness = fitness(max(new_pop, key= lambda x : fitness(x, weights, values, capacity)), weights, values, capacity)
-        return (new_pop, history + [current_fitness])
-    
-    
-    final_gen, history = reduce(step, range(generations), (population, []))
+    history = []
+    best_so_far = max(population, key=lambda x: fitness(x, weights, values, capacity))
+
+    for _ in range(generations):
+        population = next_generation(population, mutation_prob, weights, values, capacity)
+        current_best = max(population, key=lambda x: fitness(x, weights, values, capacity))
+        best_so_far = max([best_so_far, current_best], key=lambda x: fitness(x, weights, values, capacity))
+        history.append(fitness(best_so_far, weights, values, capacity))
     
     end = time.time()
     runtime = end - start
     
-    best = max(final_gen, key=lambda x : fitness(x, weights, values, capacity))
+    best = best_so_far
     best_fitness = fitness(best, weights, values, capacity)
     return best, best_fitness, history, runtime

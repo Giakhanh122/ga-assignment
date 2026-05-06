@@ -16,12 +16,10 @@ MUTATION_PROB = 1 / LENGTH
 
 
 
-
-
-
-def plot_result(history):
+def plot_result(history, title_=""):
     import matplotlib.pyplot as plt
     plt.plot(range(len(history)), history)
+    plt.title(title_)
     plt.xlabel("generations")
     plt.ylabel("fitness")
     plt.grid()
@@ -55,7 +53,7 @@ def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generatio
     # print(history)
     print("Runtime : ",runtime)
 
-    plot_result(history)
+    plot_result(history, "One max problem")
     get_json("One Max", best, best_fitness, runtime)
     return best, best_fitness, history, runtime
 
@@ -77,7 +75,7 @@ def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generation
     print("Best fitness : ",best_fitness)
     # print(history)
     print("Runtime : ",runtime)
-    plot_result(history)
+    plot_result(history, "Knap sack problem")
     get_json("Knapsack", best, best_fitness, runtime)
     return best, best_fitness, history, runtime
 
