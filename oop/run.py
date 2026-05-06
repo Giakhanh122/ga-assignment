@@ -7,6 +7,7 @@ from src.items import Items
 
 import json
 import random
+import os
 
 SEED = 42
 POP_SIZE = 100
@@ -26,18 +27,21 @@ def plot_result(history, title_=""):
     plt.show()
 
 
-def get_json(problem, best, best_fitness, runtime):
-    data = {
-        "Problem": problem,
-        "Best Solution": best,
-        "Best Fitness": best_fitness,
+def get_json(problem_name, best, best_fitness, runtime, filename):
+    result = {
+        "Problem": problem_name,
+        "Result": best,
+        "Fitness": best_fitness,
         "Runtime": runtime,
     }
-    with open("result.json", "w") as f:
-        json.dump(data, f, indent=4)
+
+    file_path = os.path.join("reports", filename)
+
+    with open(file_path, "w") as f:
+        json.dump(result, f, indent=4)
 
 
-def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB, title_="One max problem"):
+def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB, get_json_file=False, title_="One max problem OOP"):
     random.seed(seed)
     population = Population(size=population_size, length=length)
     ga = OneMax_GeneticAlgorithm(
@@ -54,11 +58,12 @@ def run_one_max(*, seed=SEED, population_size=POP_SIZE, length=LENGTH, generatio
     print("Runtime : ",runtime)
 
     plot_result(history, title_)
-    get_json("One Max", best, best_fitness, runtime)
+    if get_json_file:
+        get_json("One Max", best, best_fitness, runtime, filename="result_oop_onemax.json")
     return best, best_fitness, history, runtime
 
 
-def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB, weights=None, values=None, title_="Knap sack problem"):
+def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generations=GENERATIONS, mutation_prob=MUTATION_PROB, weights=None, values=None, get_json_file=None, title_="Knap sack problem OOP"):
     random.seed(seed)
     population = Population(size=population_size, length=length)
     items = Items(numberOfItems=length, weights=weights, values=values)
@@ -76,7 +81,8 @@ def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generation
     # print(history)
     print("Runtime : ",runtime)
     plot_result(history, title_)
-    get_json("Knapsack", best, best_fitness, runtime)
+    if get_json_file:
+        get_json("Knapsack", best, best_fitness, runtime, filename="result_oop_knapsack.json")
     return best, best_fitness, history, runtime
 
 
@@ -122,6 +128,6 @@ def run_knap_sack(seed=SEED, population_size=POP_SIZE, length=LENGTH, generation
 
 if __name__ == "__main__":
     print("__ ONE MAX ___")
-    run_one_max()
+    run_one_max(get_json_file=True)
     print("__ KNAPSACK ___")
-    run_knap_sack()
+    run_knap_sack(get_json_file=True)

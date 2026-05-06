@@ -3,6 +3,7 @@ import src.knapsack as knapsack
 
 import json
 import random
+import os
 
 SEED = 42
 POP_SIZE = 100
@@ -21,18 +22,21 @@ def plot_result(history, title_=""):
     plt.show()
 
 
-def get_json(problem_name, best, best_fitness, runtime):
+def get_json(problem_name, best, best_fitness, runtime, filename):
     result = {
         "Problem": problem_name,
         "Result": best,
         "Fitness": best_fitness,
         "Runtime": runtime,
     }
-    with open("result.json", "w") as f:
+
+    file_path = os.path.join("reports", filename)
+
+    with open(file_path, "w") as f:
         json.dump(result, f, indent=4)
 
 
-def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, title_ = "One max problem"):
+def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, get_json_file = False, title_ = "One max problem FP"):
     random.seed(seed)
     best, best_fitness, history, runtime = onemax.ga(
         length=length,
@@ -46,11 +50,12 @@ def run_one_max(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATI
     print("Runtime : ",runtime)
 
     plot_result(history, title_)
-    get_json("One Max", best, best_fitness, runtime)
+    if get_json_file:
+        get_json("One Max", best, best_fitness, runtime, filename="result_fp_onemax.json")
     return best, best_fitness, history, runtime
 
 
-def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, weights=None, values=None, capacity=None, title_ = "Knap sack problem"):
+def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTATION_PROB, generations=GENERATIONS, seed=SEED, weights=None, values=None, capacity=None, get_json_file = False, title_ = "Knap sack problem FP"):
     random.seed(seed)
     best, best_fitness, history, runtime = knapsack.ga(
         length=length,
@@ -66,14 +71,15 @@ def run_knap_sack(*, length=LENGTH, population_size=POP_SIZE, mutation_prob=MUTA
     # print(history)
     print("Runtime : ",runtime)
     plot_result(history, title_)
-    get_json("Knapsack", best, best_fitness, runtime)
+    if get_json_file:
+        get_json("Knapsack", best, best_fitness, runtime, filename="result_fp_knapsack.json")
     return best, best_fitness, history, runtime
 
 
 if __name__ == "__main__":
     print("__ ONE MAX ___")
-    run_one_max()
+    run_one_max(get_json_file = True)
     print("__ KNAPSACK ___")
-    run_knap_sack()
+    run_knap_sack(get_json_file = True)
 
 

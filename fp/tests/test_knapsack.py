@@ -2,6 +2,12 @@ import sys
 import random
 from pathlib import Path
 
+
+# Do you want json file ?
+GET_JSON_FILE = False
+
+
+
 ROOT = Path(__file__).resolve().parents[2]  # Go up to ga-assignment root
 FP_DIR = ROOT / "fp"
 sys.path.insert(0, str(ROOT))
@@ -75,7 +81,8 @@ def run_knapsack_case(name, config):
         weights=weights,
         values=values,
         capacity=capacity,
-        title_=tit
+        title_=tit,
+        get_json_file=GET_JSON_FILE
     )
 
     selected_indices = [index for index, bit in enumerate(best) if bit]

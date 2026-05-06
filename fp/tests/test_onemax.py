@@ -1,6 +1,11 @@
 import sys
 from pathlib import Path
 
+# Do you want json file ?
+GET_JSON_FILE = False
+
+
+
 ROOT = Path(__file__).resolve().parents[2]  # Go up to ga-assignment root
 FP_DIR = ROOT / "fp"
 sys.path.insert(0, str(ROOT))
@@ -53,7 +58,7 @@ def run_onemax_case(name, config):
     print("-" * 80)
 
     ensure_plot()
-    best, best_fitness, history, runtime = fp_run.run_one_max(length=length, title_=tit)
+    best, best_fitness, history, runtime = fp_run.run_one_max(length=length, title_=tit, get_json_file=GET_JSON_FILE)
 
     print("-" * 80)
     print("Result:")
